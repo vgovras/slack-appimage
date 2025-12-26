@@ -1,0 +1,30 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build and release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y zsync
+          chmod +x build.sh
+          ./build.sh
+          appimage=$(find . -name "*.AppImage" ! -name "linuxdeploy-*.AppImage" | head -1)
+          version=$(cat VERSION 2>/dev/null || echo "unknown")
+          tag="v$version"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release delete "$tag" --yes || true
+          fi
+          files="$appimage"
+          [ -f "${appimage}.zsync" ] && files="$files ${appimage}.zsync"
+          gh release create "$tag" $files --title "Slack v$version" --generate-notes

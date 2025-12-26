@@ -1,0 +1,6 @@
+AppDir/
+*.AppImage
+*.AppImage.zsync
+*.deb
+!linuxdeploy-x86_64.AppImage
+VERSION

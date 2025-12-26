@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>slack.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Proprietary</project_license>
+  <name>Slack</name>
+  <summary>Slack Desktop</summary>
+  <description>
+    <p>Slack Desktop client for Linux.</p>
+  </description>
+  <url type="homepage">https://slack.com</url>
+  <provides>
+    <binary>slack</binary>
+  </provides>
+</component>
+
