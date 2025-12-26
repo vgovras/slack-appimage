@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>slack.desktop</id>
+  <id>com.slack.Slack</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>Proprietary</project_license>
+  <project_license>LicenseRef-proprietary</project_license>
   <name>Slack</name>
   <summary>Slack Desktop</summary>
   <description>
-    <p>Slack Desktop client for Linux.</p>
+    <p>Slack Desktop is a team communication application that brings all your team's communication together in one place. It offers real-time messaging, file sharing, voice and video calls, and integrates with numerous third-party services to help teams collaborate more effectively.</p>
+    <p>This unofficial AppImage package provides an easy way to install and run Slack Desktop on Linux systems without requiring system-wide installation.</p>
   </description>
   <url type="homepage">https://slack.com</url>
+  <launchable type="desktop-id">slack.desktop</launchable>
   <provides>
     <binary>slack</binary>
   </provides>
+  <developer_name>Slack Technologies</developer_name>
+  <content_rating type="oars-1.1"/>
 </component>
 
