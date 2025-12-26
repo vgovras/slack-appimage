@@ -17,14 +17,6 @@ sed -i 's|Icon=/usr/share/pixmaps/slack.png|Icon=slack|g' AppDir/usr/share/appli
 cp AppDir/usr/share/applications/slack.desktop .
 cp AppDir/usr/share/pixmaps/slack.png .
 
-cat > AppDir/AppRun << 'EOF'
-#!/bin/bash
-APPDIR="$(dirname "$(readlink -f "${0}")")"
-export LD_LIBRARY_PATH="$APPDIR/usr/lib/slack:$APPDIR/usr/lib:${LD_LIBRARY_PATH}"
-exec "$APPDIR/usr/lib/slack/slack" "$@"
-EOF
-chmod +x AppDir/AppRun
-
 mkdir -p AppDir/usr/share/metainfo
 cp com.slack.Slack.appdata.xml AppDir/usr/share/metainfo/
 
