@@ -26,3 +26,12 @@ Unofficial Slack AppImage for Linux.
 ## Auto-Update
 
 The AppImage includes update information pointing to GitHub Releases. Use AppImageUpdate or similar tools to check for updates.
+
+## Validating AppStream Metadata
+
+To validate the AppStream metadata file:
+
+```bash
+sudo apt-get install appstream
+appstreamcli validate com.slack.Slack.appdata.xml
+```

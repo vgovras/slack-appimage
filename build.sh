@@ -26,7 +26,7 @@ EOF
 chmod +x AppDir/AppRun
 
 mkdir -p AppDir/usr/share/metainfo
-cp slack.appdata.xml AppDir/usr/share/metainfo/
+cp com.slack.Slack.appdata.xml AppDir/usr/share/metainfo/
 
 export LDAI_UPDATE_INFORMATION="gh-releases-zsync|vgovras|slack-appimage|latest|Slack-*.AppImage.zsync"
 NO_STRIP=1 LINUXDEPLOY_OUTPUT_VERSION=$VERSION ./linuxdeploy-x86_64.AppImage \

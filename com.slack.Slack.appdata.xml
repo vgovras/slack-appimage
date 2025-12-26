@@ -14,7 +14,9 @@
   <provides>
     <binary>slack</binary>
   </provides>
-  <developer_name>Slack Technologies</developer_name>
+  <developer id="com.slack">
+    <name>Slack Technologies</name>
+  </developer>
   <content_rating type="oars-1.1"/>
 </component>
 
