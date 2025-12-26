@@ -1,0 +1,48 @@
+name: Test Version Check
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+      
+      - name: Test version check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          echo "=== Testing version check ==="
+          chmod +x version.sh
+          
+          echo "Getting latest version and checking if build needed..."
+          LATEST=$(./version.sh 2>&1 | head -1 | tr -d '[:space:]')
+          VERSION_CHECK=$?
+          
+          echo "Latest version: '$LATEST'"
+          echo "Version check exit code: $VERSION_CHECK"
+          
+          echo ""
+          echo "=== Result ==="
+          if [ $VERSION_CHECK -eq 0 ]; then
+            echo "✅ Returned TRUE (exit 0) - versions DIFFER - build should RUN"
+          else
+            echo "✅ Returned FALSE (exit 1) - versions MATCH - build should be SKIPPED"
+          fi
+          
+          echo ""
+          echo "=== Debug info ==="
+          echo "LATEST variable: '$LATEST'"
+          echo "Exit code: $VERSION_CHECK"
+          echo "Expected: 0 = true (build), 1 = false (skip)"
+

@@ -1,7 +1,15 @@
 name: Build and Release
 
 on:
+  schedule:
+    - cron: '0 0 * * *'
   workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force build (skip version check)'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -12,19 +20,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Check version
+        id: version
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          if [ "${{ inputs.force }}" = "true" ]; then
+            echo "version=$(./version.sh 2>&1 | head -1 | tr -d '[:space:]')" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          LATEST=$(./version.sh 2>&1 | head -1 | tr -d '[:space:]')
+          ./version.sh >/dev/null 2>&1 && echo "version=$LATEST" >> $GITHUB_OUTPUT || echo "skip=true" >> $GITHUB_OUTPUT
+      
       - name: Build and release
+        if: steps.version.outputs.skip != 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           sudo apt-get update && sudo apt-get install -y zsync
-          chmod +x build.sh
+          chmod +x build.sh version.sh
           ./build.sh
-          appimage=$(find . -name "*.AppImage" ! -name "linuxdeploy-*.AppImage" | head -1)
-          version=$(cat VERSION 2>/dev/null || echo "unknown")
-          tag="v$version"
-          if gh release view "$tag" >/dev/null 2>&1; then
-            gh release delete "$tag" --yes || true
-          fi
-          files="$appimage"
-          [ -f "${appimage}.zsync" ] && files="$files ${appimage}.zsync"
-          gh release create "$tag" $files --title "Slack v$version" --generate-notes
+          
+          APPIMAGE=$(find . -name "*.AppImage" ! -name "linuxdeploy-*.AppImage" | head -1)
+          VERSION=${{ steps.version.outputs.version }}
+          TAG="v$VERSION"
+          
+          gh release delete "$TAG" --yes 2>/dev/null || true
+          FILES="$APPIMAGE"
+          [ -f "${APPIMAGE}.zsync" ] && FILES="$FILES ${APPIMAGE}.zsync"
+          gh release create "$TAG" $FILES --title "Slack $VERSION" --generate-notes
