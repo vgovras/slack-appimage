@@ -20,7 +20,11 @@ cp AppDir/usr/share/pixmaps/slack.png .
 mkdir -p AppDir/usr/share/metainfo
 cp com.slack.Slack.appdata.xml AppDir/usr/share/metainfo/
 
-export LDAI_UPDATE_INFORMATION="gh-releases-zsync|vgovras|slack-appimage|latest|Slack-*.AppImage.zsync"
+REPO="${GITHUB_REPOSITORY:-vgovras/slack-appimage}"
+ZSYNC_NAME="Slack-${VERSION}-x86_64.AppImage.zsync"
+UPDATE_URL="zsync|https://github.com/${REPO}/releases/download/v${VERSION}/${ZSYNC_NAME}"
+
+export LDAI_UPDATE_INFORMATION="$UPDATE_URL"
 NO_STRIP=1 LINUXDEPLOY_OUTPUT_VERSION=$VERSION ./linuxdeploy-x86_64.AppImage \
   --appdir AppDir \
   --executable AppDir/usr/lib/slack/slack \
